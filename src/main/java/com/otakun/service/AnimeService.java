@@ -4,11 +4,13 @@
  */
 package com.otakun.service;
 
+import com.otakun.BasicApplication;
 import com.otakun.dto.AnimeDto;
 import com.otakun.model.Anime;
-import com.otakun.principal.Principal;
+import com.otakun.dao.AnimeDao;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,9 +20,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AnimeService {
+    public static AnimeDao repo;
+    @Autowired
+    private AnimeDao repositorio;
     
     public List<AnimeDto> obterTodosOsAnimes(){
-        List<Anime> animes  = Principal.REPO.findAll();
+        
+        List<Anime> animes  = BasicApplication.getBasicApplication().getAnimeDao().findAll();
         System.out.println(animes);
         return converteDados(animes);
     }

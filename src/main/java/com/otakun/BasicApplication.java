@@ -1,32 +1,34 @@
 package com.otakun;
 
-import com.otakun.dao.AnimeDao;
-import com.otakun.principal.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-
+import com.otakun.dao.AnimeDao;
+import org.springframework.context.ApplicationContext;
 
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "com.otakun.dao")
-@EntityScan (basePackages = "com.otakun.model")
-public class BasicApplication implements CommandLineRunner {
+@EntityScan(basePackages = "com.otakun.model")
+public class BasicApplication {
+
     @Autowired
     private AnimeDao repositorio;
+    
+    private static BasicApplication basicApplication;
 
     public static void main(String[] args) {
-        SpringApplication.run(BasicApplication.class, args);
+        ApplicationContext context = SpringApplication.run(BasicApplication.class, args);
+        BasicApplication.basicApplication = context.getBean(BasicApplication.class);
     }
 
-    @Override
-    public void run(String... args) throws Exception {
-        Principal principal = new Principal(repositorio);
-        System.out.println( principal.getAnimes() );
-        
-        principal.exibeMenu();
+    public static BasicApplication getBasicApplication() {
+        return BasicApplication.basicApplication ;
+    }
+    
+    public AnimeDao getAnimeDao(){
+        return this.repositorio;
     }
 
 }
